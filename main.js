@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer')
 
 const goToPage = async (page, URL) => {
     console.log('Navigating to page: ', URL)
-    await page.goto(URL, {
+    return await page.goto(URL, {
         waitUntil: 'networkidle2'
     })
 }
@@ -26,6 +26,7 @@ const grabAnchorNodes = async (page) => {
     })
 }
 
+
 const main = async () => {
     const {
         PUPPETEER,
@@ -33,15 +34,12 @@ const main = async () => {
     } = config
 
     const {
-        Reddit
-    } = SITES
-    // Reddit
-    const {
         subreddits,
         getBaseURL
-    } = Reddit
+    } = SITES.Reddit
 
-    const urlsToScrape = []
+    const urlQueue = []
+    const resultSet = []
 
     subreddits.forEach((sub) => {
         if (sub.keywords.length) {
@@ -49,77 +47,41 @@ const main = async () => {
                 const payload = {
                     ...sub,
                     keyword,
-                    url: getBaseURL({...sub, keyword})
+                    url: getBaseURL({
+                        ...sub,
+                        keyword
+                    })
                 }
                 delete payload.keywords
-                urlsToScrape.push(payload)
+                urlQueue.push(payload)
             })
         } else {
             const payload = {
                 ...sub,
                 keyword: null,
-                url: getBaseURL({...sub})
+                url: getBaseURL({
+                    ...sub
+                })
             }
             delete payload.keywords
-            urlsToScrape.push(payload)
+            urlQueue.push(payload)
         }
     })
 
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-    
-    const a = Promise.all([...await urlsToScrape.map(async ({url, ...rest}) => {
-        console.log({url})
+    const browser = await puppeteer.launch(PUPPETEER)
+    for(let i = 0; i < urlQueue.length; i++) {
+        const { url, ...rest } = urlQueue[i]
+        const page = await browser.newPage()
         await goToPage(page, url)
-        return {
+        const results = await grabAnchorNodes(page)
+        resultSet.push({
             ...rest,
-            results: await grabAnchorNodes(page)
-        }
-    })])
-
-    console.log(a)
-
-    // const formattedURLs = await subreddits.map(async (sub) => {
-    //     const URL = getBaseURL(sub)
-    //     if (sub.keywords.length) {
-    //         // Keyword logic
-    //         const keywordResults = {}
-    //         await sub.keywords.map(async keyword => {
-    //             console.log('Current URL: ', URL)
-    //             const subURL = `${URL}&q=${keyword}`
-    //             page = await goToPage(subURL)
-    //             keywordResults[keyword] = {
-    //                 results: await grabAnchorNodes(page),
-    //                 keyword
-    //             }
-    //         })
-    //         return {
-    //             ...sub,
-    //             ...Object.values(keywordResults)
-    //         }
-    //     } else {
-    //         console.log('Current URL: ', URL)
-    //         page = await goToPage(URL)
-    //         const results = await grabAnchorNodes(page)
-    //         return {
-    //             ...sub,
-    //             ...results
-    //         }
-    //     }  
-    // })
-    // console.log({formattedURLs})
-
-
-    // await page.goto('https://maps.org', {waitUntil: 'networkidle2'})
-    // await page.click('.search-toggle')
-    // await page.type('#search-form-1', 'DMT \n')
-    // const anchors = await page.$$eval('div.jetpack-instant-search__search-results-primary', div => { 
-    //     const children = div[0].childNodes
-
-    // })
-    // // await page.waitForTimeout(5000)
-    // console.log({anchors})
-    // await browser.close()
+            url,
+            results
+        })
+    }
+    console.log({resultSet})
+    browser.close()
 }
 
 main()
