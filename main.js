@@ -69,7 +69,9 @@ const main = async () => {
     })
 
     const browser = await puppeteer.launch(PUPPETEER)
-    for(let i = 0; i < urlQueue.length; i++) {
+
+    
+    for (let i = 0; i < urlQueue.length; i++) {
         const { url, ...rest } = urlQueue[i]
         const page = await browser.newPage()
         await goToPage(page, url)
