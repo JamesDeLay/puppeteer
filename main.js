@@ -2,7 +2,7 @@ const config = require('./config')
 const puppeteer = require('puppeteer')
 
 
-const goToPage = async (URL) => {
+const goToPage = async (page, URL) => {
     console.log('Navigating to page: ', URL)
     await page.goto(URL, {
         waitUntil: 'networkidle2'
@@ -65,11 +65,19 @@ const main = async () => {
         }
     })
 
-    console.log(urlsToScrape)
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
     
-    return Promise.all([...urlsToScrape.map(url => {
-        
+    const a = Promise.all([...await urlsToScrape.map(async ({url, ...rest}) => {
+        console.log({url})
+        await goToPage(page, url)
+        return {
+            ...rest,
+            results: await grabAnchorNodes(page)
+        }
     })])
+
+    console.log(a)
 
     // const formattedURLs = await subreddits.map(async (sub) => {
     //     const URL = getBaseURL(sub)
