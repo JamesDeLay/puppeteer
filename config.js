@@ -5,17 +5,34 @@ module.exports = {
         devtools: true
     },
     SITES: {
-        MAPS: {
-            url: 'https://maps.org',
-            keywords: ['DMT', 'Psilocybin', 'Ayahuasca'],
-        },
-        rBooks: {
-            url: 'https://www.reddit.com/r/books/',
-            keywords: ["Doors of Stone", "Winds of Winter", "Fantasy"],
-            comments: "Sort by new - only 3 latest articles"
-        },
-        stocks: {
-            
+        Reddit: {
+            getBaseURL({name, sort='', t='', keyword=''}) {
+                const URL = `https://www.reddit.com/r/${name}/search/?q=${keyword}&sort=${sort}&t=${t}`
+                return URL
+            },
+            subreddits: [
+                {
+                    // Grab newest
+                    name: "stoicism",
+                    keywords: [],
+                    limit: 5,
+                    sort: 'new'
+                },
+                {
+                    name: "hackernews",
+                    keywords: ["TypeScript", "Python", "React",],
+                    limit: 2,
+                    sort: 'top',
+                    t: 'month'
+                 },
+                {
+                    name: "EatCheapAndHealthy",
+                    keywords: ["Stew", "Carrots", "Salmon"],
+                    limit: 3,
+                    sort: 'relevance',
+                    t: 'all'
+                },
+            ]
         }
     }
 }
