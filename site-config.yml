@@ -1,0 +1,23 @@
+sites:
+  reddit:
+    stoicism:
+      keywords:
+      limit: 5
+      sort: 'new'
+      time:
+    hackernews:
+      keywords:
+        - "TypeScript"
+        - "Python"
+        - "Hack"
+      limit: 5
+      sort: 'top'
+      time: 'month'
+    EatCheapAndHealthy:
+      keywords:
+        - "Steak"
+        - "Stew"
+        - "Salmon"
+      limit: 5
+      sort: 'top'
+      time: 'all'
