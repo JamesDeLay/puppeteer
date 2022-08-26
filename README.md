@@ -2,7 +2,7 @@
 
 ## What is this?
 
-A project that leverages Puppeteer & Airflow to send a daily morning email with a curated list of stuffed scraped from Reddit. I automated the scraping using Puppeteer, saved the result set to MongoDB, and emailed a subscriber list the results.
+A project that leverages Puppeteer to send a daily morning email with a curated list of stuffed scraped from Reddit. I automated the scraping of Reddit using Puppeteer and plan on saving the result set to MongoDB, and emailing a subscriber list the results.
 
 ## Technology
 
