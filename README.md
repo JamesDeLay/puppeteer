@@ -54,6 +54,6 @@ A project that leverages `puppeteer` & `nodemailer` to send a daily morning emai
 
 - [x] Find best way to iterate through URLs and run Puppeteer script on each page
 - [ ] Save results somewhere
-- [x] Test an email using nodemailer
+- [x] Test a test email using `nodemailer`
 - [ ] Send email to subscriber list
 - [ ] Make an HTML email template
