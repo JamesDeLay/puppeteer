@@ -96,9 +96,6 @@ class Script {
         return result
     }
 
-    async doEmailResults() {
-        
-    }
 
     async run()  {
         // Scrape subreddits & email results
@@ -106,8 +103,9 @@ class Script {
         const subredditResult = await this.doScrapeSubReddits(browser)
         // Terminate connection to Puppeteer
         browser.close()
+
         // Email results
-        this.emailService.sendEmail({
+        await this.emailService.sendEmail({
             from: "from-example@email.com",
             to: "to-example@email.com",
             subject: `Subreddit Scraping: ${new Date().toLocaleDateString()}`,
@@ -122,11 +120,11 @@ const script = new Script({
         // eslint-disable-next-line no-undef
         headless: process.env.PUPPETEER_HEADLESS || false,
         // eslint-disable-next-line no-undef
-        executablePath: String(process.env.PUPPETEER_EXECUTABLE_PATH) || 'google-chrome-stable',
+        executablePath: String(process.env.PUPPETEER_EXECUTABLE_PATH),
         // eslint-disable-next-line no-undef
-        devtools: process.env.PUPPETEER_ENABLE_DEV_TOOLS || false
+        devtools: process.env.PUPPETEER_ENABLE_DEV_TOOLS || false,
     }
 })
 
-console.log('>> Running script...')
+console.log('>> Starting script...')
 script.run()
