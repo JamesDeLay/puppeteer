@@ -24,7 +24,7 @@ class Script {
     }
 
     async browserGoToPage (page, url) {
-        console.log('Navigating to page: ', url)
+        console.log('>> Navigating to page: ', url)
         return await page.goto(url, {
             waitUntil: 'networkidle2'
         })
@@ -101,6 +101,7 @@ class Script {
         // Scrape subreddits & email results
         const browser = await this.initPuppeteer()
         const subredditResult = await this.doScrapeSubReddits(browser)
+        
         // Terminate connection to Puppeteer
         browser.close()
 
