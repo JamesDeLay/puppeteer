@@ -115,7 +115,6 @@ class Script {
         })
     }
 }
-
 const script = new Script({
     // eslint-disable-next-line no-undef
     siteConfigYamlPath: String(process.env.YAML_SITE_CONFIG_PATH),
@@ -123,10 +122,11 @@ const script = new Script({
         // eslint-disable-next-line no-undef
         headless: process.env.PUPPETEER_HEADLESS || false,
         // eslint-disable-next-line no-undef
-        executablePath: String(process.env.PUPPETEER_EXECUTABLE_PATH) || null,
+        executablePath: String(process.env.PUPPETEER_EXECUTABLE_PATH) || 'google-chrome-stable',
         // eslint-disable-next-line no-undef
         devtools: process.env.PUPPETEER_ENABLE_DEV_TOOLS || false
     }
 })
 
+console.log('>> Running script...')
 script.run()
